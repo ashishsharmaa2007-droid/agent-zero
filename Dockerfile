@@ -1,12 +1,21 @@
-FROM python:3.10-slim
+# Use Python 3.11 to satisfy browser-use requirements
+FROM python:3.11-slim
+
+# Set working directory
 WORKDIR /app
-# Install git (required for some agent tools)
-RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
-# Copy project
+
+# Install git and essential build tools
+RUN apt-get update && apt-get install -y git build-essential && rm -rf /var/lib/apt/lists/*
+
+# Copy project files
 COPY . .
-# Install requirements
+
+# Upgrade pip and install requirements
+RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
-# Expose the port Koyeb uses
+
+# Expose port 8080 for Koyeb
 EXPOSE 8080
-# Start Agent Zero (Directly calling main.py)
+
+# Start Agent Zero
 CMD ["python", "main.py"]
