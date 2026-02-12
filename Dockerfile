@@ -26,8 +26,19 @@ RUN apt-get update && apt-get install -y \
 # Copy everything from your repo
 COPY . .
 
-# Install light requirements
-RUN pip install --no-cache-dir groq python-dotenv httpx flask pydantic duckduckgo-search playwright langchain-community
+# Install light requirements + Web UI dependencies
+RUN pip install --no-cache-dir \
+    groq \
+    python-dotenv \
+    httpx \
+    flask \
+    pydantic \
+    duckduckgo-search \
+    playwright \
+    langchain-community \
+    uvicorn \
+    starlette \
+    python-multipart
 
 # Install Chromium (Light)
 RUN playwright install --with-deps chromium
