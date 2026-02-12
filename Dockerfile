@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y \
 # Copy everything from your repo
 COPY . .
 
-# Install core logic + Web UI + async dependencies
+# Install the full engine required for Agent Zero's Brain, Memory, and UI
 RUN pip install --no-cache-dir \
     groq \
     python-dotenv \
@@ -41,7 +41,10 @@ RUN pip install --no-cache-dir \
     python-multipart \
     nest_asyncio \
     aiohttp \
-    requests
+    requests \
+    litellm \
+    faiss-cpu \
+    pyyaml
 
 # Install Chromium (Light)
 RUN playwright install --with-deps chromium
