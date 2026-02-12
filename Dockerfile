@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y \
 # Copy everything from your repo
 COPY . .
 
-# Install light requirements + Web UI dependencies
+# Install core logic + Web UI + async dependencies
 RUN pip install --no-cache-dir \
     groq \
     python-dotenv \
@@ -38,7 +38,10 @@ RUN pip install --no-cache-dir \
     langchain-community \
     uvicorn \
     starlette \
-    python-multipart
+    python-multipart \
+    nest_asyncio \
+    aiohttp \
+    requests
 
 # Install Chromium (Light)
 RUN playwright install --with-deps chromium
