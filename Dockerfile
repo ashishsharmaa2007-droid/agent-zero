@@ -1,21 +1,39 @@
-# Use Python 3.11 to satisfy browser-use requirements
 FROM python:3.11-slim
 
-# Set working directory
 WORKDIR /app
 
-# Install git and essential build tools
-RUN apt-get update && apt-get install -y git build-essential && rm -rf /var/lib/apt/lists/*
+# Install dependencies for Playwright (browsing)
+RUN apt-get update && apt-get install -y \
+    git \
+    libevent-2.1-7 \
+    libnss3 \
+    libnspr4 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libdrm2 \
+    libxkbcommon0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxrandr2 \
+    libgbm1 \
+    libpango-1.0-0 \
+    libcairo2 \
+    asound2 \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy project files
 COPY . .
 
-# Upgrade pip and install requirements
-RUN pip install --no-cache-dir --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+# Install light requirements
+RUN pip install --no-cache-dir groq python-dotenv httpx flask pydantic duckduckgo-search playwright langchain-community
 
-# Expose port 8080 for Koyeb
+# Install ONLY the tiny chromium browser (Crucial for the 2GB limit!)
+RUN playwright install --with-deps chromium
+
+ENV PORT=8080
+ENV DOCKER_MODE=false
+
 EXPOSE 8080
 
-# Start Agent Zero
 CMD ["python", "main.py"]
