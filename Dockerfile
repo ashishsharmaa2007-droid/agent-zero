@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y \
 # Copy everything from your repo
 COPY . .
 
-# Install the full engine required for Agent Zero's Brain, Memory, and UI
+# Install the engine + Utilities for file handling and logic
 RUN pip install --no-cache-dir \
     groq \
     python-dotenv \
@@ -44,7 +44,10 @@ RUN pip install --no-cache-dir \
     requests \
     litellm \
     faiss-cpu \
-    pyyaml
+    pyyaml \
+    simpleeval \
+    psutil \
+    colorama
 
 # Install Chromium (Light)
 RUN playwright install --with-deps chromium
